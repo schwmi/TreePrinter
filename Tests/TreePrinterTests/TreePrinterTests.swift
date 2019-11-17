@@ -2,14 +2,35 @@ import XCTest
 @testable import TreePrinter
 
 final class TreePrinterTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(TreePrinter().text, "Hello, World!")
+
+    func testTreePrinting() {
+    	let root = Node(content: "Root")
+        let treePrinter = TreePrinter()
+        let result = treePrinter.printTree(startingFrom: root)
+        XCTAssertEqual(result, "Root")
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testTreePrinting", testTreePrinting),
     ]
+
+    struct Node: PrintableTreeNode {
+    	var childs: [PrintableTreeNode] = []
+    	var content: String
+    }
+
+    /*
+.
+├── one
+│   ├── subnode1
+│   ├── subnode2
+│   ├── two
+│   │   ├── subnode1
+│   │   ├── subnode2
+│   │   └── three
+│   │       ├── subnode1
+│   │       └── subnode2
+│   └── subnode3
+└── outernode
+    */
 }
