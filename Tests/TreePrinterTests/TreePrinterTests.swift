@@ -4,10 +4,24 @@ import XCTest
 final class TreePrinterTests: XCTestCase {
 
     func testTreePrinting() {
-    	let root = Node(content: "Root")
+    // Single node case
+    do {
+        let root = Node(content: "Root")
         let treePrinter = TreePrinter()
         let result = treePrinter.printTree(startingFrom: root)
         XCTAssertEqual(result, "Root")
+    }
+
+    // Single subnode
+    do {
+        let root = Node(content: "Root", childs: [Node(content: "Child")])
+        let treePrinter = TreePrinter()
+        let result = treePrinter.printTree(startingFrom: root)
+        XCTAssertEqual(result, """
+        Root─┐
+             └─Child
+        """)
+    }
     }
 
     static var allTests = [
@@ -15,8 +29,8 @@ final class TreePrinterTests: XCTestCase {
     ]
 
     struct Node: PrintableTreeNode {
-    	var childs: [PrintableTreeNode] = []
     	var content: String
+    	var childs: [PrintableTreeNode] = []
     }
 
     /*
