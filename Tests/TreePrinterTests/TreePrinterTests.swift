@@ -34,45 +34,40 @@ final class TreePrinterTests: XCTestCase {
     func testDeepHierarchyCase() {
         let root = Node(content: "Root",
                         childs: [Node(content: "Child1",
-                                      childs: [Node(content: "Sub1"), Node(content: "Sub2")]),
+                                      childs: [Node(content: "Sub1", childs: [
+                                        Node(content: "SubSub1"),
+                                        Node(content: "SubSub2"),
+                                        Node(content: "SubSub3")
+                                      ]),
+                                               Node(content: "Sub2"),
+                                               Node(content: "Sub3")]),
                                  Node(content: "Child2",
-                                      childs: [Node(content: "AnotherSub1")])])
+                                      childs: [Node(content: "Sub1")])])
         let treePrinter = TreePrinter()
         let result = treePrinter.printTree(startingFrom: root)
-        print(result)
         XCTAssertEqual(result, """
         Root─┐
              ├─Child1─┐
-             │        ├─Sub1
-             │        └─Sub2
+             │        ├─Sub1─┐
+             │        │      ├─SubSub1
+             │        │      ├─SubSub2
+             │        │      └─SubSub3
+             │        ├─Sub2
+             │        └─Sub3
              └─Child2─┐
-                      └─AnotherSub1
+                      └─Sub1
         """)
     }
 
     static var allTests = [
         ("testTreePrinting", testSingleNodeCase),
         ("testSingleChildCase", testSingleChildCase),
-        ("testMultipleChildsCase", testMultipleChildsCase)
+        ("testMultipleChildsCase", testMultipleChildsCase),
+        ("testDeepHierarchyCase", testDeepHierarchyCase)
     ]
 
     struct Node: PrintableTreeNode {
-    	var content: String
-    	var childs: [PrintableTreeNode] = []
+        var content: String
+        var childs: [PrintableTreeNode] = []
     }
-
-    /*
-.
-├── one
-│   ├── subnode1
-│   ├── subnode2
-│   ├── two
-│   │   ├── subnode1
-│   │   ├── subnode2
-│   │   └── three
-│   │       ├── subnode1
-│   │       └── subnode2
-│   └── subnode3
-└── outernode
-    */
 }
