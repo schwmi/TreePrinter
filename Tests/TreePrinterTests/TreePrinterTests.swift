@@ -3,17 +3,14 @@ import XCTest
 
 final class TreePrinterTests: XCTestCase {
 
-    func testTreePrinting() {
-    // Single node case
-    do {
+    func testSingleNodeCase() {
         let root = Node(content: "Root")
         let treePrinter = TreePrinter()
         let result = treePrinter.printTree(startingFrom: root)
         XCTAssertEqual(result, "Root")
     }
 
-    // Single subnode
-    do {
+    func testSingleChildCase() {
         let root = Node(content: "Root", childs: [Node(content: "Child")])
         let treePrinter = TreePrinter()
         let result = treePrinter.printTree(startingFrom: root)
@@ -22,10 +19,41 @@ final class TreePrinterTests: XCTestCase {
              └─Child
         """)
     }
+
+    func testMultipleChildsCase() {
+        let root = Node(content: "Root", childs: [Node(content: "Child1"), Node(content: "Child2")])
+        let treePrinter = TreePrinter()
+        let result = treePrinter.printTree(startingFrom: root)
+        XCTAssertEqual(result, """
+        Root─┐
+             ├─Child1
+             └─Child2
+        """)
+    }
+
+    func testDeepHierarchyCase() {
+        let root = Node(content: "Root",
+                        childs: [Node(content: "Child1",
+                                      childs: [Node(content: "Sub1"), Node(content: "Sub2")]),
+                                 Node(content: "Child2",
+                                      childs: [Node(content: "AnotherSub1")])])
+        let treePrinter = TreePrinter()
+        let result = treePrinter.printTree(startingFrom: root)
+        print(result)
+        XCTAssertEqual(result, """
+        Root─┐
+             ├─Child1─┐
+             │        ├─Sub1
+             │        └─Sub2
+             └─Child2─┐
+                      └─AnotherSub1
+        """)
     }
 
     static var allTests = [
-        ("testTreePrinting", testTreePrinting),
+        ("testTreePrinting", testSingleNodeCase),
+        ("testSingleChildCase", testSingleChildCase),
+        ("testMultipleChildsCase", testMultipleChildsCase)
     ]
 
     struct Node: PrintableTreeNode {
